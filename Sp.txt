@@ -1,0 +1,197 @@
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Sp_Display`()
+BEGIN 
+
+select id,name,password,email,phonenumber,createdBy,modifiedBy,createdOn,modifiedOn, is_deleted,roleId, is_Active from userdata where is_deleted=0; 
+
+END
+
+ 
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Sp_Post_procedure`(
+_id int ,
+_name varchar(45),
+_password varchar(45),
+_email varchar(45),
+_phonenumber varchar(45),
+_roleId int
+)
+BEGIN
+declare check_EmailValidator int default 0;
+declare Valid varchar(45);
+select count(1) into check_EmailValidator from management.userdata where Email=_Email;
+    IF (check_EmailValidator>0) THEN
+      set Valid = 'Email already exist';
+      select Valid;
+    ELSE
+      insert into userdata(Name,Password,Email,PhoneNumber,roleId,is_Active,createdBy,modifiedBy,createdOn,modifiedOn,is_deleted) values(_Name,_Password,_Email,_PhoneNumber,_roleId,1,1,1,now(),now(),0);
+      set Valid = 'Record created';
+      select Valid;
+   End IF;
+END
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Sp_EditGetDisplay`(
+In _id int)
+BEGIN 
+
+select id,name,password,phonenumber from userdata Where id=_id; 
+
+END
+
+
+
+
+ 
+
+ 
+
+ 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Sp_Put_procedure`(
+_id int ,
+_name varchar(45),
+_password varchar(45),
+_phonenumber varchar(45)
+)
+BEGIN
+UPDATE userdata
+SET   
+			name= _name,
+			password =_password,
+			phonenumber = _phonenumber
+			
+            WHERE  id = _id;
+END
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Sp_Del_procedure`(
+_id int 
+)
+BEGIN
+            update userdata
+            set is_deleted = 1
+            WHERE  id = _id;
+            END
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Sp_LoginPost`(
+in _email varchar(45),
+in _password varchar(45)
+)
+BEGIN
+select id, name,password,email, roleId, phonenumber from userdata where email = _email and password = _password and is_Deleted=0;
+END
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Sp_TaskMdisplay`()
+BEGIN 
+
+select task_id,user_id,task_name,task_status from taskm; 
+
+END
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Sp_TaskMPost`( 
+
+_task_id int , 
+
+_user_id int, 
+
+_task_name varchar(45), 
+
+_task_status tinyint(20) 
+
+)
+BEGIN 
+
+insert into taskm(task_id,user_id,task_name,task_status) 
+
+values (_task_id,_user_id,_task_name,_task_status); 
+
+END
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Sp_TaskPut_procedure`(
+_user_id int ,
+_task_status tinyint(20)
+)
+BEGIN
+UPDATE taskm
+SET   
+			task_status= _task_status
+            
+            WHERE  user_id = _user_id;
+END
